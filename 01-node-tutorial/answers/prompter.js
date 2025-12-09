@@ -43,6 +43,7 @@ const form = () => {
   `;
 };
 
+
 const server = http.createServer((req, res) => {
   console.log("req.method is ", req.method);
   console.log("req.url is ", req.url);
@@ -64,6 +65,10 @@ const server = http.createServer((req, res) => {
   } else {
     res.end(form());
   }
+});
+
+server.on('request', (req) => {
+  console.log('event received: ', req.method, req.url);
 });
 
 server.listen(3000);
