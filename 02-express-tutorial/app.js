@@ -16,6 +16,12 @@ app.get('/api/v1/products', (req, res) => {
     res.json(products)
 })
 
+app.get('/api/v1/products/:productID', (req, res) => {
+    const idToFind = parseInt(req.params.productID)
+    const product = products.find((p) => p.id === idToFind)
+    res.json(product)
+})
+
 // Handle page not found
 app.all('*', (req, res) => {
     res.status(404).send('Page not found')
