@@ -26,22 +26,24 @@ app.get('/api/v1/products/:productID', (req, res) => {
 })
 
 app.get('/api/v1/query', (req, res) => {
-    if (req.query.search) {
-        const filteredProducts = products.filter((p) => p.name.toLowerCase().startsWith(req.query.search))
-        if (filteredProducts.length === 0) {
-            return res.status(404).json({ message: 'No products found' })
-        }
+    let filteredProducts = [...products]
 
-        if (req.query.limit) {
-            return res.json(filteredProducts.slice(0, req.query.limit))
-        }
-        res.json(filteredProducts)
-    } else {
-        if (req.query.limit) {
-            return res.json(products.slice(0, req.query.limit))
-        }
-        res.json(products)
+    if (req.query.search) {
+        filteredProducts = filteredProducts.filter((p) => p.name.toLowerCase().startsWith(req.query.search))
     }
+
+    if (req.query.leq) {
+        filteredProducts = filteredProducts.filter((p) => p.price <= req.query.leq)
+    }
+
+    if (filteredProducts.length === 0) {
+        return res.status(404).json({ message: 'No products found' })
+    }
+
+    if (req.query.limit) {
+        return res.json(filteredProducts.slice(0, req.query.limit))
+    }
+    res.json(filteredProducts)
 })
 
 // Handle page not found
