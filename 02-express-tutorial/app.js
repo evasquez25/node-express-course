@@ -9,7 +9,8 @@ const logger = (req, res, next) => {
     console.log(req.method, req.url, Date.now())
     next()
 }
-
+ 
+app.use(logger)
 app.use(express.static('./public'))
 
 // Routes
@@ -17,7 +18,7 @@ app.get('/api/v1/test', (req, res) => {
     res.json({ message: 'It worked!' })
 })
 
-app.get('/api/v1/products', logger, (req, res) => {
+app.get('/api/v1/products', (req, res) => {
     res.json(products)
 })
 
