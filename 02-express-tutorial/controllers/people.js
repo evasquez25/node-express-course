@@ -16,7 +16,17 @@ const getPeople = (req, res) => {
     res.json(people)
 }
 
+const findPerson = (req, res) => {
+    const idToFind = parseInt(req.params.id)
+    const person = people.find((p) => p.id === idToFind)
+    if (!person) {
+        return res.status(404).json({ success: false, message: 'Person not found' })
+    }
+    res.status(200).json(person)
+}
+
 module.exports = {
     addPerson,
-    getPeople
+    getPeople,
+    findPerson
 }
