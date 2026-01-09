@@ -1,17 +1,26 @@
 console.log('Express Tutorial')
 
 const express = require('express')
-const { products } = require('./data')
+const { products, people } = require('./data')
+const peopleRouter = require('./routes/people')
 const app = express()
 
-// Middleware
-app.use(express.static('./public'))
+// MIDDLEWARE
+const logger = (req, res, next) => {
+    console.log(req.method, req.url, Date.now())
+    next()
+}
+app.use(logger)
 
-// Routes 
-app.get('/api/v1/test', (req, res) => {
-    res.json({ message: 'It worked!' })
-})
+app.use(express.static('./methods-public'))
 
+// body parsers
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
+
+app.use('/api/v1/people', peopleRouter) // Routes for people
+
+// 'GET' ROUTES
 app.get('/api/v1/products', (req, res) => {
     res.json(products)
 })
@@ -45,6 +54,7 @@ app.get('/api/v1/query', (req, res) => {
     }
     res.json(filteredProducts)
 })
+
 
 // Handle page not found
 app.all('*', (req, res) => {
